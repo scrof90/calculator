@@ -1,91 +1,110 @@
-let displayValue = '0';
-let valueA = '';
-let valueB = '';
-let operator = null;
-let waitingForA = true;
+const settings = {
+  displayValue: '0',
+  valueA: 0,
+  valueB: 0,
+  operator: null,
+  waitingForA: true,
+};
 
-const numBtns = Array.from(document.querySelectorAll('.num'));
-numBtns.forEach((btn) => (btn.onclick = evalNum));
+function initBtns() {
+  const numBtns = Array.from(document.querySelectorAll('.num'));
+  numBtns.forEach((btn) => (btn.onclick = evalNum));
 
-const opBtns = Array.from(document.querySelectorAll('.op'));
-opBtns.forEach((btn) => (btn.onclick = evalOperator));
+  const opBtns = Array.from(document.querySelectorAll('.op'));
+  opBtns.forEach((btn) => (btn.onclick = evalOperator));
 
-const equalsBtn = document.getElementById('equals');
-equalsBtn.onclick = operate;
+  const equalsBtn = document.getElementById('equals');
+  equalsBtn.onclick = operate;
 
-const clearBtn = document.getElementById('clear');
-clearBtn.onclick = clear;
+  const clearBtn = document.getElementById('clear');
+  clearBtn.onclick = clear;
 
-// TODO: refactor the whole thing to make an array of numbers and operators
+  const signBtn = document.getElementById('flipSign');
+  signBtn.onclick = flipSign;
+}
 
 function evalNum(e) {
   const num = e.target.textContent;
-  if (displayValue === '0' && num === '0') {
-    displayValue = '0';
-  } else if (displayValue === '0' && num !== '0') {
-    displayValue = num;
-  } else {
-    displayValue += num;
+  // prevent 0 from appearing before numbers
+  if (settings.displayValue === '0') {
+    settings.displayValue = '';
   }
-  if (waitingForA) {
-    valueA = displayValue;
-  } else {
-    valueB = displayValue;
-  }
-  updateScreen();
+  settings.displayValue += num;
+  updValues();
+  updScreen();
 }
 
 function evalOperator(e) {
   const op = e.target.textContent;
   switch (op) {
     case '/':
-      operator = divide;
+      settings.operator = divide;
       break;
     case '*':
-      operator = multiply;
+      settings.operator = multiply;
       break;
     case '-':
-      operator = subtract;
+      settings.operator = subtract;
       break;
     case '+':
-      operator = add;
+      settings.operator = add;
       break;
-    case 'x<sup>y</sup>':
-      operator = exponent;
+    case 'xy':
+      settings.operator = exp;
+      break;
+    case '%':
+      settings.operator = percent;
       break;
   }
-  waitingForA = false;
-  displayValue = '';
+  settings.waitingForA = false;
+  settings.displayValue = '0';
 }
 
 function clear(e) {
-  displayValue = '0';
-  valueA = '0';
-  valueB = '0';
-  operator = null;
-  waitingForA = true;
-  updateScreen();
+  settings.displayValue = '0';
+  settings.valueA = 0;
+  settings.valueB = 0;
+  settings.operator = null;
+  settings.waitingForA = true;
+  updScreen();
 }
 
-function updateScreen() {
+function updScreen() {
   const screen = document.getElementById('screen');
-  screen.textContent = displayValue;
+  screen.textContent = settings.displayValue;
+}
+
+function updValues() {
+  if (settings.waitingForA) {
+    settings.valueA = +settings.displayValue;
+  } else {
+    settings.valueB = +settings.displayValue;
+  }
 }
 
 function operate(e) {
-  if (!operator) return;
-  const a = +valueA;
-  const b = +valueB;
-  if (operator === divide && b === 0) {
-    displayValue = 'NO';
-    valueA = '';
-  } else {
-    const result = operator(a, b);
-    displayValue = result;
-    valueA = result;
+  if (!settings.operator) return;
+  let result = settings.operator(settings.valueA, settings.valueB);
+  if (!isInt(result)) {
+    result = result.toFixed(2);
   }
-  updateScreen();
-  waitingForA = true;
+  settings.displayValue = result.toString();
+  updScreen();
+  settings.valueA = result === 'ERROR' ? 0 : result;
+  settings.displayValue = settings.valueA;
+  settings.waitingForA = true;
+}
+
+function flipSign() {
+  let num = +settings.displayValue;
+  num *= -1;
+  settings.displayValue = num.toString();
+  updValues();
+  updScreen();
+}
+
+function percent(a, b) {
+  return (b / 100) * a;
 }
 
 function add(a, b) {
@@ -101,9 +120,18 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+  if (b === 0) return 'ERROR';
   return a / b;
 }
 
-function exponent(a, b) {
+function exp(a, b) {
   return a ** b;
 }
+
+function isInt(n) {
+  return n % 1 === 0;
+}
+
+(function () {
+  initBtns();
+})();
