@@ -11,6 +11,7 @@ sup {
 
 .wrapper {
   font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,36 +30,44 @@ sup {
   display: flex;
   justify-content: end;
   align-items: center;
-  font-family: 'Digital-7 Mono';
-  font-size: 40px;
   padding-bottom: 8px;
   padding-left: 10px;
   padding-right: 10px;
   grid-column: 1 / 5;
   grid-row: 1 / 2;
-  border: 1px solid hsl(180, 25%, 25%);
+  border: 1px solid hsl(24, 100%, 69%);
   border-radius: 4px;
   margin: 3px;
+}
+
+.display {
+  font-family: 'Digital-7 Mono';
+  font-size: 40px;
 }
 
 .btn {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: hsl(180, 25%, 25%);
-  color: hsl(0, 0%, 100%);
+  background-color: hsl(220, 9%, 87%);
   line-height: 34px;
   font-size: 20px;
-  border: 1px solid hsl(200, 12%, 95%);
+  border: 1px solid hsl(220, 9%, 87%);
   border-radius: 4px;
-  margin: 3px;
+  margin: 4px;
 }
 
-.btn:hover {
-  background: hsl(210, 13%, 40%);
-  border-color: hsl(200, 12%, 95%);
+.btn.num {
+  background-color: hsl(200, 12%, 95%);
+  border: 1px solid hsl(200, 12%, 95%);
+}
+
+.btn#equals {
+  background-color: hsl(24, 100%, 69%);
+  border: 1px solid hsl(24, 100%, 69%);
 }
 
 .btn:active {
-  box-shadow: 0 1px 10px slateblue;
+  box-shadow: 0 1px 6px hsla(225, 6%, 13%, 0.28);
 }

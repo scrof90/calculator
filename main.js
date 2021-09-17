@@ -1,17 +1,17 @@
-const settings = {
-  displayValue: '0',
-  valueA: 0,
-  valueB: 0,
+const calc = {
+  displayVal: '0',
+  valA: null,
+  valB: null,
   operator: null,
   waitingForA: true,
 };
 
 function initBtns() {
   const numBtns = Array.from(document.querySelectorAll('.num'));
-  numBtns.forEach((btn) => (btn.onclick = evalNum));
+  numBtns.forEach((btn) => (btn.onclick = inputNum));
 
   const opBtns = Array.from(document.querySelectorAll('.op'));
-  opBtns.forEach((btn) => (btn.onclick = evalOperator));
+  opBtns.forEach((btn) => (btn.onclick = inputOperator));
 
   const equalsBtn = document.getElementById('equals');
   equalsBtn.onclick = operate;
@@ -21,85 +21,98 @@ function initBtns() {
 
   const signBtn = document.getElementById('flipSign');
   signBtn.onclick = flipSign;
+
+  const floatBtn = document.getElementById('point');
+  floatBtn.onclick = floatMode;
 }
 
-function evalNum(e) {
+function inputNum(e) {
   const num = e.target.textContent;
   // prevent 0 from appearing before numbers
-  if (settings.displayValue === '0') {
-    settings.displayValue = '';
+  if (calc.displayVal === '0') {
+    calc.displayVal = '';
   }
-  settings.displayValue += num;
+  calc.displayVal += num;
   updValues();
   updScreen();
 }
 
-function evalOperator(e) {
+function inputOperator(e) {
+  if (calc.operator) operate();
   const op = e.target.textContent;
   switch (op) {
     case '/':
-      settings.operator = divide;
+      calc.operator = divide;
       break;
     case '*':
-      settings.operator = multiply;
+      calc.operator = multiply;
       break;
     case '-':
-      settings.operator = subtract;
+      calc.operator = subtract;
       break;
     case '+':
-      settings.operator = add;
+      calc.operator = add;
       break;
     case 'xy':
-      settings.operator = exp;
+      calc.operator = exp;
       break;
     case '%':
-      settings.operator = percent;
+      calc.operator = percent;
       break;
   }
-  settings.waitingForA = false;
-  settings.displayValue = '0';
+  calc.waitingForA = false;
+  calc.displayVal = '0';
 }
 
 function clear(e) {
-  settings.displayValue = '0';
-  settings.valueA = 0;
-  settings.valueB = 0;
-  settings.operator = null;
-  settings.waitingForA = true;
+  calc.displayVal = '0';
+  calc.valA = null;
+  calc.valB = null;
+  calc.operator = null;
+  calc.waitingForA = true;
   updScreen();
 }
 
 function updScreen() {
-  const screen = document.getElementById('screen');
-  screen.textContent = settings.displayValue;
+  const screen = document.getElementById('displayVal');
+  screen.textContent = calc.displayVal;
 }
 
 function updValues() {
-  if (settings.waitingForA) {
-    settings.valueA = +settings.displayValue;
+  const num = +calc.displayVal;
+  if (calc.waitingForA) {
+    calc.valA = num;
   } else {
-    settings.valueB = +settings.displayValue;
+    calc.valB = num;
   }
 }
 
+// TODO: implement typing anew immediately after operate
+
 function operate(e) {
-  if (!settings.operator) return;
-  let result = settings.operator(settings.valueA, settings.valueB);
+  if (!calc.operator) return;
+  let result = calc.operator(calc.valA, calc.valB);
   if (!isInt(result)) {
     result = result.toFixed(2);
   }
-  settings.displayValue = result.toString();
+  calc.displayVal = result.toString();
   updScreen();
-  settings.valueA = result === 'ERROR' ? 0 : result;
-  settings.displayValue = settings.valueA;
-  settings.waitingForA = true;
+  calc.valA = result === 'ERROR' ? 0 : result;
+  calc.displayVal = calc.valA;
+  calc.operator = null;
+  calc.waitingForA = true;
 }
 
-function flipSign() {
-  let num = +settings.displayValue;
-  num *= -1;
-  settings.displayValue = num.toString();
+function flipSign(e) {
+  const num = +calc.displayVal * -1;
+  calc.displayVal = num.toString();
   updValues();
+  updScreen();
+}
+
+function floatMode(e) {
+  if (calc.displayVal.includes('.')) return;
+  calc.displayVal += '.';
   updScreen();
 }
 
