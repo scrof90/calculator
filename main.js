@@ -4,6 +4,7 @@ const calc = {
   valB: null,
   operator: null,
   waitingForA: true,
+  displayWidth: 9,
 };
 
 // TODO: add backspace function
@@ -32,7 +33,7 @@ function initBtns() {
 
 function inputNum(e) {
   const num = e.target.textContent;
-  if (calc.displayVal.length === 9) return;
+  if (calc.displayVal.length === displayWidth) return;
   // prevent 0 from appearing before numbers
   if (calc.displayVal === '0') {
     calc.displayVal = num;
