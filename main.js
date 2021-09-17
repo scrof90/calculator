@@ -1,10 +1,10 @@
 const calc = {
+  DISPLAY_WIDTH: 9,
   displayVal: '0',
   valA: null,
   valB: null,
   operator: null,
   waitingForA: true,
-  displayWidth: 9,
 };
 
 // TODO: add backspace function
@@ -33,7 +33,7 @@ function initBtns() {
 
 function inputNum(e) {
   const num = e.target.textContent;
-  if (calc.displayVal.length === displayWidth) return;
+  if (calc.displayVal.length === calc.DISPLAY_WIDTH) return;
   // prevent 0 from appearing before numbers
   if (calc.displayVal === '0') {
     calc.displayVal = num;
