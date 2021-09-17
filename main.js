@@ -6,6 +6,10 @@ const calc = {
   waitingForA: true,
 };
 
+// TODO: add backspace function
+
+// TODO: add fixed screen size with num.toExponential(n)
+
 function initBtns() {
   const numBtns = Array.from(document.querySelectorAll('.num'));
   numBtns.forEach((btn) => (btn.onclick = inputNum));
@@ -28,12 +32,14 @@ function initBtns() {
 
 function inputNum(e) {
   const num = e.target.textContent;
+  if (calc.displayVal.length === 9) return;
   // prevent 0 from appearing before numbers
   if (calc.displayVal === '0') {
-    calc.displayVal = '';
+    calc.displayVal = num;
+  } else {
+    calc.displayVal += num;
   }
-  calc.displayVal += num;
-  updValues();
+  updVals();
   updScreen();
 }
 
@@ -73,22 +79,6 @@ function clear(e) {
   updScreen();
 }
 
-function updScreen() {
-  const screen = document.getElementById('displayVal');
-  screen.textContent = calc.displayVal;
-}
-
-function updValues() {
-  const num = +calc.displayVal;
-  if (calc.waitingForA) {
-    calc.valA = num;
-  } else {
-    calc.valB = num;
-  }
-}
-
-// TODO: implement typing anew immediately after operate
-
 function operate(e) {
   if (!calc.operator) return;
   let result = calc.operator(calc.valA, calc.valB);
@@ -98,7 +88,7 @@ function operate(e) {
   calc.displayVal = result.toString();
   updScreen();
   calc.valA = result === 'ERROR' ? 0 : result;
-  calc.displayVal = calc.valA;
+  calc.displayVal = '';
   calc.operator = null;
   calc.waitingForA = true;
 }
@@ -106,7 +96,7 @@ function operate(e) {
 function flipSign(e) {
   const num = +calc.displayVal * -1;
   calc.displayVal = num.toString();
-  updValues();
+  updVals();
   updScreen();
 }
 
@@ -114,6 +104,20 @@ function floatMode(e) {
   if (calc.displayVal.includes('.')) return;
   calc.displayVal += '.';
   updScreen();
+}
+
+function updScreen() {
+  const screen = document.getElementById('displayVal');
+  screen.textContent = calc.displayVal;
+}
+
+function updVals() {
+  const num = +calc.displayVal;
+  if (calc.waitingForA) {
+    calc.valA = num;
+  } else {
+    calc.valB = num;
+  }
 }
 
 function percent(a, b) {
