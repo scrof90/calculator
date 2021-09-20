@@ -1,10 +1,8 @@
 const calc = {
   DISPLAY_WIDTH: 9,
-  displayVal: '0',
-  valA: null,
-  valB: null,
+  result: 0,
+  input: 0,
   operator: null,
-  waitingForA: true,
 };
 
 // TODO: add backspace function
@@ -33,19 +31,17 @@ function initBtns() {
 
 function inputNum(e) {
   const num = e.target.textContent;
-  if (calc.displayVal.length === calc.DISPLAY_WIDTH) return;
-  // prevent 0 from appearing before numbers
-  if (calc.displayVal === '0') {
-    calc.displayVal = num;
+  if (!calc.operator) {
+    calc.result = +(calc.result.toString() + num);
+    updScreen(calc.result);
   } else {
-    calc.displayVal += num;
+    calc.input = +(calc.input.toString() + num);
+    updScreen(calc.input);
   }
-  updVals();
-  updScreen();
 }
 
 function inputOperator(e) {
-  if (calc.operator) operate();
+  /*   if (calc.operator) operate(); */
   const op = e.target.textContent;
   switch (op) {
     case '/':
@@ -67,58 +63,46 @@ function inputOperator(e) {
       calc.operator = percent;
       break;
   }
-  calc.waitingForA = false;
-  calc.displayVal = '0';
 }
 
 function clear(e) {
-  calc.displayVal = '0';
-  calc.valA = null;
-  calc.valB = null;
+  calc.result = 0;
+  calc.input = 0;
   calc.operator = null;
-  calc.waitingForA = true;
-  updScreen();
+  updScreen(0);
 }
 
 function operate(e) {
   if (!calc.operator) return;
-  let result = calc.operator(calc.valA, calc.valB);
+  let result = calc.operator(calc.result, calc.input);
   if (!isInt(result)) {
     result = result.toFixed(2);
   }
-  calc.displayVal = result.toString();
-  updScreen();
-  calc.valA = result === 'ERROR' ? 0 : result;
-  calc.displayVal = '';
+  updScreen(result);
+  calc.result = result === 'ERROR' ? 0 : result;
+  calc.input = 0;
   calc.operator = null;
-  calc.waitingForA = true;
 }
 
 function flipSign(e) {
-  const num = +calc.displayVal * -1;
-  calc.displayVal = num.toString();
-  updVals();
-  updScreen();
+  if (!calc.operator) {
+    calc.result = calc.result * -1;
+    updScreen(calc.result);
+  } else {
+    calc.input = calc.input * -1;
+    updScreen(calc.input);
+  }
 }
 
 function floatMode(e) {
-  if (calc.displayVal.includes('.')) return;
-  calc.displayVal += '.';
-  updScreen();
+  if (isInt(calc.input)) return;
+  calc.input = calc.input.toString() + '.';
+  updScreen(calc.input);
 }
 
-function updScreen() {
+function updScreen(num) {
   const screen = document.getElementById('displayVal');
-  screen.textContent = calc.displayVal;
-}
-
-function updVals() {
-  const num = +calc.displayVal;
-  if (calc.waitingForA) {
-    calc.valA = num;
-  } else {
-    calc.valB = num;
-  }
+  screen.textContent = num;
 }
 
 function percent(a, b) {
