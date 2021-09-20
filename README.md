@@ -1,5 +1,4 @@
-# calculator
-Project: Calculator
+# Project: Calculator
 
 for [The Odin Project](https://www.theodinproject.com "The Odin Project")
 
