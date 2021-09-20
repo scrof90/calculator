@@ -75,9 +75,6 @@ function clear(e) {
 function operate(e) {
   if (!calc.operator) return;
   let result = calc.operator(calc.result, calc.input);
-  if (!isInt(result)) {
-    result = result.toFixed(2);
-  }
   updScreen(result);
   calc.result = result === 'ERROR' ? 0 : result;
   calc.input = 0;
@@ -102,7 +99,19 @@ function floatMode(e) {
 
 function updScreen(num) {
   const screen = document.getElementById('displayVal');
-  screen.textContent = num;
+  let display = num;
+  if (display === 'ERROR') {
+    screen.textContent = display;
+    return;
+  }
+  if (!isInt(display)) {
+    display = display.toFixed(2);
+  }
+  if (display.toString().length > calc.DISPLAY_WIDTH) {
+    screen.textContent = display.toExponential(3);
+  } else {
+    screen.textContent = display;
+  }
 }
 
 function percent(a, b) {
