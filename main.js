@@ -1,5 +1,5 @@
 const calc = {
-  DISPLAY_WIDTH: 9,
+  DISPLAY_WIDTH: 8,
   a: 0,
   b: 0,
   operator: null,
@@ -103,7 +103,7 @@ function updateDisplayValue(n) {
   }
   const output = isInt(n) ? +n : +n.toFixed(2);
   if (output.toString().length > calc.DISPLAY_WIDTH) {
-    displayValue.textContent = output.toExponential(3);
+    displayValue.textContent = output.toExponential(2);
   } else {
     displayValue.textContent = output;
   }
