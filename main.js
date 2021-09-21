@@ -58,7 +58,7 @@ function inputOperator(e) {
       calc.operator = add;
       break;
     case 'xy':
-      calc.operator = exp;
+      calc.operator = exponent;
       break;
     case '%':
       calc.operator = percent;
