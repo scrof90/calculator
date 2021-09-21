@@ -1,13 +1,12 @@
 const calc = {
   DISPLAY_WIDTH: 9,
-  result: 0,
-  input: 0,
+  a: 0,
+  b: 0,
   operator: null,
+  floatMode: false,
 };
 
 // TODO: add backspace function
-
-// TODO: add fixed screen size with num.toExponential(n)
 
 function initBtns() {
   const numBtns = Array.from(document.querySelectorAll('.num'));
@@ -30,14 +29,19 @@ function initBtns() {
 }
 
 function inputNum(e) {
-  const num = e.target.textContent;
-  if (!calc.operator) {
-    calc.result = +(calc.result.toString() + num);
-    updScreen(calc.result);
+  const operand = !calc.operator ? 'a' : 'b';
+  let num = e.target.textContent;
+  if (calc.floatMode) {
+    if (isInt(calc[operand])) {
+      num = `${calc[operand]}.${num}`;
+    } else {
+      num = `${calc[operand].toFixed(1)}${num}`;
+    }
   } else {
-    calc.input = +(calc.input.toString() + num);
-    updScreen(calc.input);
+    num = `${calc[operand]}${num}`;
   }
+  calc[operand] = +num;
+  updScreen(calc[operand]);
 }
 
 function inputOperator(e) {
@@ -63,54 +67,51 @@ function inputOperator(e) {
       calc.operator = percent;
       break;
   }
+  if (calc.floatMode) calc.floatMode = false;
 }
 
 function clear(e) {
-  calc.result = 0;
-  calc.input = 0;
+  calc.a = 0;
+  calc.b = 0;
   calc.operator = null;
+  calc.floatMode = false;
   updScreen(0);
 }
 
 function operate(e) {
   if (!calc.operator) return;
-  let result = calc.operator(calc.result, calc.input);
-  updScreen(result);
-  calc.result = result === 'ERROR' ? 0 : result;
-  calc.input = 0;
+  let a = calc.operator(calc.a, calc.b);
+  updScreen(a);
+  calc.a = a === 'ERROR' ? 0 : a;
+  calc.b = 0;
   calc.operator = null;
+  calc.floatMode = false;
 }
 
 function flipSign(e) {
-  if (!calc.operator) {
-    calc.result = calc.result * -1;
-    updScreen(calc.result);
-  } else {
-    calc.input = calc.input * -1;
-    updScreen(calc.input);
-  }
+  const operand = !calc.operator ? 'a' : 'b';
+  calc[operand] = calc[operand] * -1;
+  updScreen(calc[operand]);
 }
 
 function floatMode(e) {
-  if (isInt(calc.input)) return;
-  calc.input = calc.input.toString() + '.';
-  updScreen(calc.input);
+  if (!calc.floatMode) calc.floatMode = true;
 }
 
-function updScreen(num) {
+function updScreen(n) {
   const screen = document.getElementById('displayVal');
-  let display = num;
-  if (display === 'ERROR') {
-    screen.textContent = display;
+  let output = n;
+  if (output === 'ERROR') {
+    screen.textContent = output;
     return;
   }
-  if (!isInt(display)) {
-    display = display.toFixed(2);
+  if (!isInt(output)) {
+    output = output.toFixed(2);
   }
-  if (display.toString().length > calc.DISPLAY_WIDTH) {
-    screen.textContent = display.toExponential(3);
+  if (output.toString().length > calc.DISPLAY_WIDTH) {
+    screen.textContent = output.toExponential(3);
   } else {
-    screen.textContent = display;
+    screen.textContent = output;
   }
 }
 

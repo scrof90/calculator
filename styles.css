@@ -35,7 +35,7 @@ sup {
   padding-right: 10px;
   grid-column: 1 / 5;
   grid-row: 1 / 2;
-  border: 1px solid hsl(24, 100%, 69%);
+  border: 1px solid hsl(220, 0%, 60%);
   border-radius: 4px;
   margin: 3px;
 }
