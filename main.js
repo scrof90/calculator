@@ -79,9 +79,9 @@ function clear(e) {
 
 function operate(e) {
   if (!calc.operator) return;
-  let a = calc.operator(calc.a, calc.b);
-  updScreen(a);
-  calc.a = a === 'ERROR' ? 0 : a;
+  const result = calc.operator(calc.a, calc.b);
+  updScreen(result);
+  calc.a = result === 'ERROR' ? 0 : result;
   calc.b = 0;
   calc.operator = null;
   calc.floatMode = false;
@@ -89,7 +89,7 @@ function operate(e) {
 
 function flipSign(e) {
   const operand = !calc.operator ? 'a' : 'b';
-  calc[operand] = calc[operand] * -1;
+  calc[operand] *= -1;
   updScreen(calc[operand]);
 }
 
