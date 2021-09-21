@@ -29,23 +29,22 @@ function initBtns() {
 }
 
 function inputNum(e) {
+  const num = e.target.textContent;
   const operand = !calc.operator ? 'a' : 'b';
-  let num = e.target.textContent;
   if (calc.floatMode) {
     if (isInt(calc[operand])) {
-      num = `${calc[operand]}.${num}`;
+      calc[operand] = +`${calc[operand]}.${num}`;
     } else {
-      num = `${calc[operand].toFixed(1)}${num}`;
+      calc[operand] = +`${calc[operand].toFixed(1)}${num}`;
     }
   } else {
-    num = `${calc[operand]}${num}`;
+    calc[operand] = +`${calc[operand]}${num}`;
   }
-  calc[operand] = +num;
   updScreen(calc[operand]);
 }
 
 function inputOperator(e) {
-  /*   if (calc.operator) operate(); */
+  if (calc.operator) operate();
   const op = e.target.textContent;
   switch (op) {
     case '/':
