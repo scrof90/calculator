@@ -130,7 +130,7 @@ function divide(a, b) {
   return a / b;
 }
 
-function exp(a, b) {
+function exponent(a, b) {
   return a ** b;
 }
 
