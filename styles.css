@@ -14,7 +14,7 @@ sup {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   min-height: 100vh;
   max-width: 100wh;
 }
@@ -69,4 +69,10 @@ sup {
 
 .btn:active {
   box-shadow: 0 1px 6px hsla(225, 6%, 13%, 0.28);
+}
+
+.my-github {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
 }
