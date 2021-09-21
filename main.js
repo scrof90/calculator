@@ -6,25 +6,23 @@ const calc = {
   floatMode: false,
 };
 
-// TODO: add backspace function
-
 function initBtns() {
-  const numBtns = Array.from(document.querySelectorAll('.num'));
+  const numBtns = Array.from(document.querySelectorAll('.js-btn-num'));
   numBtns.forEach((btn) => (btn.onclick = inputNum));
 
-  const opBtns = Array.from(document.querySelectorAll('.op'));
+  const opBtns = Array.from(document.querySelectorAll('.js-btn-operator'));
   opBtns.forEach((btn) => (btn.onclick = inputOperator));
 
-  const equalsBtn = document.getElementById('equals');
+  const equalsBtn = document.querySelector('.js-btn-equals');
   equalsBtn.onclick = operate;
 
-  const clearBtn = document.getElementById('clear');
+  const clearBtn = document.querySelector('.js-btn-clear');
   clearBtn.onclick = clear;
 
-  const signBtn = document.getElementById('flipSign');
+  const signBtn = document.querySelector('.js-btn-flip-sign');
   signBtn.onclick = flipSign;
 
-  const floatBtn = document.getElementById('point');
+  const floatBtn = document.querySelector('.js-btn-point');
   floatBtn.onclick = floatMode;
 }
 
@@ -40,7 +38,7 @@ function inputNum(e) {
   } else {
     calc[operand] = +`${calc[operand]}${num}`;
   }
-  updScreen(calc[operand]);
+  updateDisplayValue(calc[operand]);
 }
 
 function inputOperator(e) {
@@ -74,13 +72,13 @@ function clear(e) {
   calc.b = 0;
   calc.operator = null;
   calc.floatMode = false;
-  updScreen(0);
+  updateDisplayValue(0);
 }
 
 function operate(e) {
   if (!calc.operator) return;
   const result = calc.operator(calc.a, calc.b);
-  updScreen(result);
+  updateDisplayValue(result);
   calc.a = result === 'ERROR' ? 0 : result;
   calc.b = 0;
   calc.operator = null;
@@ -90,27 +88,24 @@ function operate(e) {
 function flipSign(e) {
   const operand = !calc.operator ? 'a' : 'b';
   calc[operand] *= -1;
-  updScreen(calc[operand]);
+  updateDisplayValue(calc[operand]);
 }
 
 function floatMode(e) {
   if (!calc.floatMode) calc.floatMode = true;
 }
 
-function updScreen(n) {
-  const screen = document.getElementById('displayVal');
-  let output = n;
-  if (output === 'ERROR') {
-    screen.textContent = output;
+function updateDisplayValue(n) {
+  const displayValue = document.querySelector('.js-display-value');
+  if (n === 'ERROR') {
+    displayValue.textContent = n;
     return;
   }
-  if (!isInt(output)) {
-    output = output.toFixed(2);
-  }
+  const output = isInt(n) ? +n : +n.toFixed(2);
   if (output.toString().length > calc.DISPLAY_WIDTH) {
-    screen.textContent = output.toExponential(3);
+    displayValue.textContent = output.toExponential(3);
   } else {
-    screen.textContent = output;
+    displayValue.textContent = output;
   }
 }
 

@@ -40,7 +40,7 @@ sup {
   margin: 3px;
 }
 
-.display {
+.display-value {
   font-family: 'Digital-7 Mono';
   font-size: 40px;
 }
@@ -58,12 +58,12 @@ sup {
   margin: 4px;
 }
 
-.btn.num {
+.btn-num {
   background-color: hsl(200, 12%, 95%);
   border: 1px solid hsl(200, 12%, 95%);
 }
 
-.btn#equals {
+.btn-equals {
   background-color: hsl(24, 100%, 69%);
   border: 1px solid hsl(24, 100%, 69%);
 }
