@@ -78,11 +78,11 @@ function clear(e) {
 function operate(e) {
   if (!calc.operator) return;
   const result = calc.operator(calc.a, calc.b);
-  updateDisplayValue(result);
   calc.a = result === 'ERROR' ? 0 : result;
   calc.b = 0;
   calc.operator = null;
   calc.floatMode = false;
+  updateDisplayValue(result);
 }
 
 function flipSign(e) {
