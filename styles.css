@@ -16,7 +16,7 @@ sup {
   align-items: center;
   justify-content: space-evenly;
   min-height: 100vh;
-  max-width: 100wh;
+  max-width: 100vw;
 }
 
 .calc {
