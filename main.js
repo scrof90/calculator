@@ -31,12 +31,12 @@ function inputNum(e) {
   const operand = !calc.operator ? 'a' : 'b';
   if (calc.floatMode) {
     if (isInt(calc[operand])) {
-      calc[operand] = +`${calc[operand]}.${num}`;
+      calc[operand] = Number(`${calc[operand]}.${num}`);
     } else {
-      calc[operand] = +`${calc[operand].toFixed(1)}${num}`;
+      calc[operand] = Number(`${calc[operand].toFixed(1)}${num}`);
     }
   } else {
-    calc[operand] = +`${calc[operand]}${num}`;
+    calc[operand] = Number(`${calc[operand]}${num}`);
   }
   updateDisplayValue(calc[operand]);
 }
@@ -57,7 +57,6 @@ function inputOperator(e) {
       calc.operator = add;
       break;
     case 'exponent':
-      console.log(op);
       calc.operator = exponent;
       break;
     case 'percent':
