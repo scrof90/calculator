@@ -43,26 +43,25 @@ function inputNum(e) {
 
 function inputOperator(e) {
   if (calc.operator) operate();
-  const op = e.target.textContent;
+  const op = e.target.dataset.operator;
   switch (op) {
-    case '/':
+    case 'divide':
       calc.operator = divide;
       break;
-    case '*':
+    case 'multiply':
       calc.operator = multiply;
       break;
-    case '-':
+    case 'subtract':
       calc.operator = subtract;
       break;
-    case '+':
+    case 'add':
       calc.operator = add;
       break;
-    case 'xy':
+    case 'exponent':
       calc.operator = exponent;
       break;
-    case '%':
+    case 'percent':
       calc.operator = percent;
-      break;
   }
   if (calc.floatMode) calc.floatMode = false;
 }
