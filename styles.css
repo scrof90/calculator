@@ -29,9 +29,7 @@ sup {
   display: flex;
   justify-content: end;
   align-items: center;
-  padding-bottom: 18px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 0 10px;
   grid-column: 1 / 5;
   grid-row: 1 / 2;
   border: 1px solid hsl(220, 0%, 60%);
