@@ -99,7 +99,7 @@ function updateDisplayValue(n) {
     displayValue.textContent = n;
     return;
   }
-  const output = isInt(n) ? +n : +n.toFixed(2);
+  const output = isInt(n) ? Number(n) : Number(n.toFixed(2));
   if (output.toString().length > calc.DISPLAY_WIDTH) {
     displayValue.textContent = output.toExponential(2);
   } else {
