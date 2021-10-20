@@ -42,7 +42,6 @@ function inputNum(e) {
 }
 
 function inputOperator(e) {
-  if (calc.operator) operate();
   const op = e.target.dataset.operator;
   switch (op) {
     case 'divide':
@@ -58,6 +57,7 @@ function inputOperator(e) {
       calc.operator = add;
       break;
     case 'exponent':
+      console.log(op);
       calc.operator = exponent;
       break;
     case 'percent':
